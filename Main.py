@@ -1,3 +1,6 @@
+#!python
+#cython: language_level=3
+
 import random
 import copy
 import datetime
@@ -228,7 +231,7 @@ class beautifulSlideShowUpdate:
                 if (self.getPhotoPosition(self.initialSolution[i]) == 'V'):
                     score = self.getMinimumBetweenTwoPhotos(self.getPhotoTags(self.initialSolution[i]),
                                                     self.getPhotoTags(self.initialSolution[position]))
-                    if score <= besN:
+                    if score <= bestN:
                         bestPosition = copy.copy(self.initialSolution[i])
                         bestN = copy.copy(score)
 
