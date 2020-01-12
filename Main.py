@@ -1,12 +1,6 @@
-#!python
-#cython: language_level=3
-
 import random
 import copy
 import datetime
-import timeit
-import random
-
 import threading
 
 class beautifulSlideShowUpdate:
@@ -21,6 +15,8 @@ class beautifulSlideShowUpdate:
     actualFitness = 0
     tabu_list = {}
     execution = True
+    set_file = 0
+
     def __init__(self,_fileName):
         self.initialSolution = []
         self.inputForm = []
@@ -30,8 +26,19 @@ class beautifulSlideShowUpdate:
         self.initialFitness = 0
         self.actualSolution = []
         self.initializeInputForm()
+        self.set_file_type()
         self.generateInitialSolution()
         self.execution = True
+
+    def set_file_type(self):
+        if self.fileName == "Datasets/c_memorable_moments.txt":
+            self.set_file = 3
+        elif self.fileName == "Datasets/b_lovely_landscapes.txt":
+            self.set_file = 2
+        elif self.fileName == "Datasets/d_pet_pictures.txt":
+            self.set_file = 4
+        else:
+            self.set_file = 5
 
     def outputToFile(self):
         file = open("d_results_"+str(datetime.datetime.now())+".out","w+")
@@ -55,7 +62,7 @@ class beautifulSlideShowUpdate:
         self.initialSolution = random.sample(range(0, self.totalPhoto), self.totalPhoto)
         self.portProccessingSortArray2()
         self.postProcessingInitialSolutionVerticalPhoto()
-        self.portProccessingSortArray2()
+        self.portProccessingSortArray3()
         #self.postProccesingInitialSolutionToFindBestEverScore()
         #threading.Timer(300, self.stop_execution).start()
         self.postProcessingInitialSolutionHorizontalPhoto()
@@ -74,20 +81,25 @@ class beautifulSlideShowUpdate:
     def portProccessingSortArray2(self):
         self.initialSolution.sort(key=lambda x: self.sortSecond(x), reverse=True)
 
+    def portProccessingSortArray3(self):
+        if self.set_file == 3:
+            self.portProccessingSortArray()
+        else:
+            self.portProccessingSortArray2()
+
+
     def sortSecond(self,val):
        return len(self.getPhotoTags(val))
 
     def postProccesingInitialSolutionToFindBestEverScore(self):
         for i in range(0,len(self.initialSolution)-1,1):
-            print(i)
+            #print(i)
             if self.checkIfPhotosHasTagsInCommon(self.initialSolution[i],self.initialSolution[i+1]):
                 continue
             else:
                 tmp = self.findNextHorizontalPhotoThatHasTagsInCommon(i)
                 if tmp != -1:
                     self.initialSolution[i+1],self.initialSolution[tmp] = self.initialSolution[tmp],self.initialSolution[i+1]
-                else:
-                    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<    ",i,"    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
 
     def findNextHorizontalPhotoThatHasTagsInCommon(self,position):
         for i in range(position+1,len(self.initialSolution),1):
@@ -124,14 +136,16 @@ class beautifulSlideShowUpdate:
                 break
 
 
+
     def postProcessingInitialSolutionHorizontalPhoto(self):
         for i in range(0,len(self.initialSolution)-1,1):
             if not self.execution:
                 break
-            print(i)
+            #print(i)
             photo1Tags = self.getPhotoTags(self.initialSolution[i])
             #scoreBetweenSlides = self.getMinimumBetweenTwoPhotos(self.getPhotoTags(self.initialSolution[i]),self.getPhotoTags(self.initialSolution[i+1]))
             scoreBetweenSlides = self.getMinimumBetweenTwoPhotos(photo1Tags,self.getPhotoTags(self.initialSolution[i+1]))
+
             bestScore = self.getBestScore(i)
             a = copy.copy(i) + 1
             tmpBest = copy.copy(scoreBetweenSlides)
@@ -144,43 +158,69 @@ class beautifulSlideShowUpdate:
                     tmpPosition = copy.copy(a)
 
             if a > i + 1 and a < len(self.initialSolution)-1:
-                print("Best score: ",bestScore ,"  FOUND ....",scoreBetweenSlides)
+                #print("Best score: ",bestScore ,"  FOUND ....",scoreBetweenSlides)
                 self.initialSolution[i + 1], self.initialSolution[a] = self.initialSolution[a],self.initialSolution[i + 1]
                 continue
             elif a >= len(self.initialSolution)-1:
-                print("Best score: ",bestScore ,"  FOUND ....",tmpBest)
+                #print("Best score: ",bestScore ,"  FOUND ....",tmpBest)
                 self.initialSolution[i + 1], self.initialSolution[tmpPosition] = self.initialSolution[tmpPosition],self.initialSolution[i + 1]
 
 
     def getBestScore(self,i):
-        #if i < 50:
-        #    return 17
-        #elif i < 100:
-        #    return 16
-        #elif i<200:
-        #    return 15
-        #elif i < 300:
-        #    return 14
-        #elif i< 1500:
-        #    return 12
-        if i< 10000:
-            return 10
-        elif i < 15000:
-            return 9
-        elif i < 20000:
-            return 8
-        elif i < 25000:
-            return 7
-        elif i< 30000:
-            return 6
-        elif i< 35000:
-            return 5
-        elif i< 40000:
-            return 4
-        elif i < 45000:
-            return 3
+        if self.set_file == 4:
+            # if i < 50:
+            #    return 17
+            # elif i < 100:
+            #    return 16
+            # elif i<200:
+            #    return 15
+            # elif i < 300:
+            #    return 14
+            # elif i< 1500:
+            #    return 12
+            if i < 10000:
+                return 10
+            elif i < 15000:
+                return 9
+            elif i < 20000:
+                return 8
+            elif i < 25000:
+                return 7
+            elif i < 30000:
+                return 6
+            elif i < 35000:
+                return 5
+            elif i < 40000:
+                return 4
+            elif i < 45000:
+                return 3
+            else:
+                return 2
+        elif self.set_file == 5:
+            #if i < 180:
+            #    return 13
+            #elif i < 270:
+            #    return 12
+            #elif i < 950:
+            #    return 11
+            #elif i < 1900:
+            #    return 10
+            if i < 14000:
+                return 9
+            elif i < 18000:
+                return 8
+            elif i < 23000:
+                return 7
+            elif i < 28000:
+                return 6
+            elif i < 34000:
+                return 5
+            else:
+                return 4
+        elif self.set_file == 2:
+            return 1
         else:
-            return 2
+            return 6
 
     def getBestScore2(self,i):
         if i < 180:
@@ -266,8 +306,6 @@ class beautifulSlideShowUpdate:
         for i in range(0,len(self.initialSolution)-1,1):
             count =  self.getMinimumBetweenTwoPhotos(self.getPhotoTags(self.initialSolution[i]),self.getPhotoTags(self.initialSolution[i+1]))
             self.initialFitness = self.initialFitness +count
-            if count == 0:
-                print(i)
 
     def calculateSolutionfitness(self,solution):
         fitnes = 0
@@ -304,16 +342,12 @@ class beautifulSlideShowUpdate:
     def combineTags(self,photoTag1,photoTag2):
         return list(set(photoTag1) | set(photoTag2))
 
-    def testFunction(self):
-        print(self.actualSolution)
-        s = self.calculateSolutionfitness(self.actualSolution)
-        print(s)
 
     def generateNeighborhood(self):
         j = 1
         for j in range(1,2,1):
-            for i in range(1,20000,1):
-                rndTmp = random.sample(range(500, len(self.actualSolution)), j*2)
+            for i in range(1,100000,1):
+                rndTmp = random.sample(range(0, len(self.actualSolution)), j*2)
                 #rndTmp = self.get_two_numbers()
                 val = copy.copy(self.actualFitness)
                 #tmp = copy.copy(self.actualSolution)
@@ -403,9 +437,8 @@ class beautifulSlideShowUpdate:
 
 
 
-import copy
-import datetime
-import random
+
+
 
 if __name__ == "__main__":
     #file = "Datasets/d_pet_pictures.txt"
@@ -413,17 +446,15 @@ if __name__ == "__main__":
     #file = "Datasets/d_pet_pictures.txt"
     #file = "Datasets/e_shiny_selfies.txt"
     #file = "Datasets/b_lovely_landscapes.txt"
-
-    file = "Datasets/d_pet_pictures.txt"
-
+    file = "Datasets/e_shiny_selfies.txt"
     start_time = datetime.datetime.now()
     tmp = beautifulSlideShowUpdate(file)
-    print(tmp.initialSolution)
+    #print(tmp.initialSolution)
     print(tmp.initialFitness)
     tmp.generateNeighborhood()
     end_time = datetime.datetime.now()
     tmp.outputToFile()
-    print(tmp.calculateSolutionfitness(tmp.actualSolution))
+    #print(tmp.calculateSolutionfitness(tmp.actualSolution))
     print(tmp.actualFitness)
     print("***********************")
     print(start_time)
