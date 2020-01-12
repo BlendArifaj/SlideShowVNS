@@ -231,7 +231,7 @@ class beautifulSlideShowUpdate:
                 if (self.getPhotoPosition(self.initialSolution[i]) == 'V'):
                     score = self.getMinimumBetweenTwoPhotos(self.getPhotoTags(self.initialSolution[i]),
                                                     self.getPhotoTags(self.initialSolution[position]))
-                    if score <= bestN:
+                    if score <= besN:
                         bestPosition = copy.copy(self.initialSolution[i])
                         bestN = copy.copy(score)
 
@@ -312,7 +312,7 @@ class beautifulSlideShowUpdate:
     def generateNeighborhood(self):
         j = 1
         for j in range(1,2,1):
-            for i in range(1,200000,1):
+            for i in range(1,20000,1):
                 rndTmp = random.sample(range(500, len(self.actualSolution)), j*2)
                 #rndTmp = self.get_two_numbers()
                 val = copy.copy(self.actualFitness)
@@ -408,22 +408,26 @@ import datetime
 import random
 
 if __name__ == "__main__":
-    #file = "/home/blend/FIEK - Mater/Viti 2/Semestri 3/Algoritmet e Inspiruara nga Natyra/Detyra/qualification_round_2019.in/d_pet_pictures.txt"
-    #file = "/home/blend/FIEK - Mater/Viti 2/Semestri 3/Algoritmet e Inspiruara nga Natyra/Detyra/qualification_round_2019.in/qualification_round_2019.in/c_memorable_moments.txt"
-    #file = "/home/blend/FIEK - Mater/Viti 2/Semestri 3/Algoritmet e Inspiruara nga Natyra/Detyra/qualification_round_2019.in/qualification_round_2019.in/d_pet_pictures.txt"
-    #file = "/home/blend/FIEK - Mater/Viti 2/Semestri 3/Algoritmet e Inspiruara nga Natyra/Detyra/qualification_round_2019.in/qualification_round_2019.in/e_shiny_selfies.txt"
-    #file = "/home/blend/FIEK - Mater/Viti 2/Semestri 3/Algoritmet e Inspiruara nga Natyra/Detyra/qualification_round_2019.in/qualification_round_2019.in/b_lovely_landscapes.txt"
+    #file = "Datasets/d_pet_pictures.txt"
+    #file = "Datasets/c_memorable_moments.txt"
+    #file = "Datasets/d_pet_pictures.txt"
+    #file = "Datasets/e_shiny_selfies.txt"
+    #file = "Datasets/b_lovely_landscapes.txt"
 
-    file = "/home/blend/FIEK - Mater/Viti 2/Semestri 3/Algoritmet e Inspiruara nga Natyra/Detyra/qualification_round_2019.in/qualification_round_2019.in/d_pet_pictures.txt"
+    file = "Datasets/d_pet_pictures.txt"
+
+    start_time = datetime.datetime.now()
     tmp = beautifulSlideShowUpdate(file)
     print(tmp.initialSolution)
     print(tmp.initialFitness)
     tmp.generateNeighborhood()
+    end_time = datetime.datetime.now()
     tmp.outputToFile()
     print(tmp.calculateSolutionfitness(tmp.actualSolution))
     print(tmp.actualFitness)
-
-
+    print("***********************")
+    print(start_time)
+    print(end_time)
 
 
 
