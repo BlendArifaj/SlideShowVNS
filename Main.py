@@ -61,10 +61,9 @@ class beautifulSlideShowUpdate:
     def generateInitialSolution(self):
         self.initialSolution = random.sample(range(0, self.totalPhoto), self.totalPhoto)
         self.portProccessingSortArray2()
+        self.postProccesingInitialSolutionToFindBestEverScore()
         self.postProcessingInitialSolutionVerticalPhoto()
         self.portProccessingSortArray3()
-        #self.postProccesingInitialSolutionToFindBestEverScore()
-        #threading.Timer(300, self.stop_execution).start()
         self.postProcessingInitialSolutionHorizontalPhoto()
         #b = len(self.getPhotoTags(self.initialSolution[0]))
         #a = len(self.getPhotoTags(self.initialSolution[39999]))
@@ -92,7 +91,13 @@ class beautifulSlideShowUpdate:
        return len(self.getPhotoTags(val))
 
     def postProccesingInitialSolutionToFindBestEverScore(self):
+        threading.Timer(40, self.stop_execution).start()
+        if self.set_file != 2:
+            return 1
+
         for i in range(0,len(self.initialSolution)-1,1):
+            if not self.execution:
+                return 1
             #print(i)
             if self.checkIfPhotosHasTagsInCommon(self.initialSolution[i],self.initialSolution[i+1]):
                 continue
@@ -102,10 +107,11 @@ class beautifulSlideShowUpdate:
                     self.initialSolution[i+1],self.initialSolution[tmp] = self.initialSolution[tmp],self.initialSolution[i+1]
 
     def findNextHorizontalPhotoThatHasTagsInCommon(self,position):
-        for i in range(position+1,len(self.initialSolution),1):
-            if self.checkIfPhotosHasTagsInCommon(self.initialSolution[position],self.initialSolution[i]):
+        for i in range(position + 1, min(position + 2000, len(self.initialSolution)), 1):
+            if self.checkIfPhotosHasTagsInCommon(self.initialSolution[position], self.initialSolution[i]):
                 return i
         return -1
+
 
     def checkIfPhotosHasTagsInCommon(self,photo_1,photo_2):
         tagsPhoto_1 = self.getPhotoTags(photo_1)
@@ -138,6 +144,9 @@ class beautifulSlideShowUpdate:
 
 
     def postProcessingInitialSolutionHorizontalPhoto(self):
+        if self.set_file == 2:
+            return 1
+
         for i in range(0,len(self.initialSolution)-1,1):
             if not self.execution:
                 break
@@ -190,12 +199,14 @@ class beautifulSlideShowUpdate:
                 return 6
             elif i < 35000:
                 return 5
-            elif i < 40000:
+            elif i < 38000:
                 return 4
-            elif i < 45000:
+            elif i < 42000:
                 return 3
-            else:
+            elif i < 45000:
                 return 2
+            else:
+                return 1
         elif self.set_file == 5:
             #if i < 180:
             #    return 13
@@ -205,15 +216,15 @@ class beautifulSlideShowUpdate:
             #    return 11
             #elif i < 1900:
             #    return 10
-            if i < 14000:
+            if i < 13500:
                 return 9
-            elif i < 18000:
+            elif i < 17500:
                 return 8
-            elif i < 23000:
+            elif i < 22500:
                 return 7
-            elif i < 28000:
+            elif i < 27500:
                 return 6
-            elif i < 34000:
+            elif i < 33500:
                 return 5
             else:
                 return 4
@@ -245,6 +256,8 @@ class beautifulSlideShowUpdate:
             return 5
 
     def postProcessingInitialSolutionVerticalPhoto(self):
+        if self.set_file == 2:
+            return 1
         try:
             for i in range(0,len(self.initialSolution),1):
                 if self.getPhotoPosition(self.initialSolution[i]) == 'V':
@@ -346,7 +359,7 @@ class beautifulSlideShowUpdate:
     def generateNeighborhood(self):
         j = 1
         for j in range(1,2,1):
-            for i in range(1,100000,1):
+            for i in range(1,20000,1):
                 rndTmp = random.sample(range(0, len(self.actualSolution)), j*2)
                 #rndTmp = self.get_two_numbers()
                 val = copy.copy(self.actualFitness)
@@ -366,6 +379,7 @@ class beautifulSlideShowUpdate:
                     #        self.tabu_list[self.helper_get_numbers(x)].add(self.helper_get_numbers(y))
                     #    else:
                     #        self.tabu_list[self.helper_get_numbers(x)] = {self.helper_get_numbers(y)}
+
                 if(val >= self.actualFitness):
                     self.actualFitness = copy.copy(val)
                     self.actualSolution[x],self.actualSolution[y] = self.actualSolution[y],self.actualSolution[x]# copy.copy(tmp)
@@ -446,7 +460,7 @@ if __name__ == "__main__":
     #file = "Datasets/d_pet_pictures.txt"
     #file = "Datasets/e_shiny_selfies.txt"
     #file = "Datasets/b_lovely_landscapes.txt"
-    file = "Datasets/e_shiny_selfies.txt"
+    file = "Datasets/b_lovely_landscapes.txt"
     start_time = datetime.datetime.now()
     tmp = beautifulSlideShowUpdate(file)
     #print(tmp.initialSolution)
