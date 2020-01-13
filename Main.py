@@ -221,11 +221,11 @@ class beautifulSlideShowUpdate:
             #    return 11
             #elif i < 1900:
             #    return 10
-            if i < 13500:
+            if i < 14000:
                 return 9
-            elif i < 17500:
+            elif i < 18000:
                 return 8
-            elif i < 22500:
+            elif i < 23000:
                 return 7
             elif i < 27500:
                 return 6
@@ -468,8 +468,8 @@ if __name__ == "__main__":
     #file = "Datasets/d_pet_pictures.txt"
     #file = "Datasets/e_shiny_selfies.txt"
     #file = "Datasets/b_lovely_landscapes.txt"
-    file = "Datasets/c_memorable_moments.txt"
-    tmp = beautifulSlideShowUpdate(file,10)
+    file = "Datasets/d_pet_pictures.txt"
+    tmp = beautifulSlideShowUpdate(file,300)
     #print(tmp.initialSolution)
     #print(tmp.initialFitness)
     tmp.generateNeighborhood()
