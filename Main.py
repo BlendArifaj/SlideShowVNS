@@ -16,8 +16,9 @@ class beautifulSlideShowUpdate:
     tabu_list = {}
     execution = True
     set_file = 0
+    time_execute = 300
 
-    def __init__(self,_fileName):
+    def __init__(self,_fileName,_time):
         self.initialSolution = []
         self.inputForm = []
         self.fileName = _fileName
@@ -27,8 +28,10 @@ class beautifulSlideShowUpdate:
         self.actualSolution = []
         self.initializeInputForm()
         self.set_file_type()
-        self.generateInitialSolution()
         self.execution = True
+        self.time_execute = _time
+        self.generateInitialSolution()
+
 
     def set_file_type(self):
         if self.fileName == "Datasets/c_memorable_moments.txt":
@@ -61,6 +64,9 @@ class beautifulSlideShowUpdate:
     def generateInitialSolution(self):
         self.initialSolution = random.sample(range(0, self.totalPhoto), self.totalPhoto)
         self.portProccessingSortArray2()
+        threading.Timer(self.time_execute, self.stop_execution).start()
+        start_time = datetime.datetime.now()
+        print("Start time: ",start_time)
         self.postProccesingInitialSolutionToFindBestEverScore()
         self.postProcessingInitialSolutionVerticalPhoto()
         self.portProccessingSortArray3()
@@ -91,7 +97,6 @@ class beautifulSlideShowUpdate:
        return len(self.getPhotoTags(val))
 
     def postProccesingInitialSolutionToFindBestEverScore(self):
-        threading.Timer(40, self.stop_execution).start()
         if self.set_file != 2:
             return 1
 
@@ -359,7 +364,10 @@ class beautifulSlideShowUpdate:
     def generateNeighborhood(self):
         j = 1
         for j in range(1,2,1):
-            for i in range(1,20000,1):
+            while True:
+                if not self.execution:
+                  return 1
+
                 rndTmp = random.sample(range(0, len(self.actualSolution)), j*2)
                 #rndTmp = self.get_two_numbers()
                 val = copy.copy(self.actualFitness)
@@ -460,19 +468,17 @@ if __name__ == "__main__":
     #file = "Datasets/d_pet_pictures.txt"
     #file = "Datasets/e_shiny_selfies.txt"
     #file = "Datasets/b_lovely_landscapes.txt"
-    file = "Datasets/b_lovely_landscapes.txt"
-    start_time = datetime.datetime.now()
-    tmp = beautifulSlideShowUpdate(file)
+    file = "Datasets/c_memorable_moments.txt"
+    tmp = beautifulSlideShowUpdate(file,10)
     #print(tmp.initialSolution)
-    print(tmp.initialFitness)
+    #print(tmp.initialFitness)
     tmp.generateNeighborhood()
     end_time = datetime.datetime.now()
+    print("Score : ",tmp.actualFitness)
+    print("End Time : ",end_time)
     tmp.outputToFile()
     #print(tmp.calculateSolutionfitness(tmp.actualSolution))
-    print(tmp.actualFitness)
-    print("***********************")
-    print(start_time)
-    print(end_time)
+
 
 
 
