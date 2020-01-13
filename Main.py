@@ -468,7 +468,7 @@ if __name__ == "__main__":
     #file = "Datasets/d_pet_pictures.txt"
     #file = "Datasets/e_shiny_selfies.txt"
     #file = "Datasets/b_lovely_landscapes.txt"
-    file = "Datasets/d_pet_pictures.txt"
+    file = "Datasets/e_shiny_selfies.txt"
     tmp = beautifulSlideShowUpdate(file,300)
     #print(tmp.initialSolution)
     #print(tmp.initialFitness)
